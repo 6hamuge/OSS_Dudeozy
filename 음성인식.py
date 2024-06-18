@@ -1,6 +1,8 @@
 import speech_recognition as sr
 import webbrowser
 import os
+#pip install SpeechRecognition
+#pip install PyAudio
 
 Recognizer = sr.Recognizer()  # 인스턴스 생성
 mic = sr.Microphone()
@@ -14,12 +16,10 @@ while True:
         print("이해하지 못했음")
         continue
     print(data)
-    if "노래 틀어줘" in data or "노래 켜" in data or "노래 틀어" in data or "노래 틀어 줘" in data:
-        url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    if "두더지" in data:
+        #웹이여서 일단 경찰청신고 홈페이지로 연결
+        url = "https://www.police.go.kr/www/security/report/report01.jsp"
         webbrowser.open(url)
-    elif "노래 꺼줘" in data or "노래 꺼" in data or "노래 꺼 줘" in data:
-        os.system('taskkill /f /im chrome.exe')
-    elif "앱 꺼줘" in data or "프로그램 종료" in data or "앱 꺼 줘" in data or "앱 꺼" in data:
         break
     else:
         print("다시 말해주세요.")
