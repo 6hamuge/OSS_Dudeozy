@@ -1,22 +1,24 @@
 합치기 위한 코드들
 폴더의 구조:
 
-*OSS_DUdoexy
-            *safety data
-            *safety map   
+* OSS_DUdoexy
+            * safety data
+            * safety map   
                         * __pycache__
                         * database
-                        *main
+                        * main
                         * manager
-                        *safetymap
-                        *scream_detection  
-                                    *main.py
-                                    *nn.py
-                                    *predict.py
-                        *speech_recognition
-                        *static
-                        *templates
-                        *manage.py
+                        * safetymap
+                        * scream_detection
+                                    * main.py
+                                    * __pycache__
+                                    * data
+                                    * nn.py
+                                    * predict.py
+                        * speech_recognition
+                        * static
+                        * templates
+                        * manage.py
 이런 식으로 있어야한다.     
 
 여기서 고친 파일들: safetymap의 main폴더의 view.py, url.py
