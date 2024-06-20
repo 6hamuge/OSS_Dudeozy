@@ -36,7 +36,7 @@ def real_time_predict(model_path):
                     print(f'예측: {label}')
                     if label == '비명':
                         print("비명이 감지되었습니다.")
-                        break
+                        
                 else:
                     print("오디오 특징 추출 실패")
             else:
