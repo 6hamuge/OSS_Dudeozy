@@ -2,12 +2,22 @@ import subprocess
 import webbrowser
 
 def run_script(script_name, args=[]):
-    result = subprocess.run(["python", script_name] + args, capture_output=True, text=True)
-    print(result.stdout)  # 실행 결과 출력
-    if "비명이 감지되었습니다." in result.stdout:
-        webbrowser.open("https://www.police.go.kr/index.do")
-        print("Scream detected! Opening police website.")
-        exit()
+    # subprocess.Popen을 사용하여 실시간으로 출력을 가져오기 위해 stdout=subprocess.PIPE를 설정합니다.
+    process = subprocess.Popen(["python", script_name] + args, stdout=subprocess.PIPE, text=True)
+    
+    while True:
+        output = process.stdout.readline()
+        if output == '' and process.poll() is not None:
+            break
+        if output:
+            print(output.strip())  # 출력된 결과를 출력합니다.
+            if "비명이 감지되었습니다." in output:
+                webbrowser.open("https://www.police.go.kr/index.do")
+                print("Scream detected! Opening police website.")
+                process.terminate()  # 비명이 감지되면 프로세스를 종료합니다.
+
+    rc = process.poll()  # 프로세스의 종료 코드를 얻습니다.
+    return rc
 
 # 첫 번째 코드 실행: feature 추출
 subprocess.run(["python", "feat_extract.py"])
