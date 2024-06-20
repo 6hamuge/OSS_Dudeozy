@@ -14,7 +14,7 @@ def run_script(script_name, args=[]):
             if "비명이 감지되었습니다." in output:
                 webbrowser.open("https://www.police.go.kr/index.do")
                 print("Scream detected! Opening police website.")
-                process.terminate()  # 비명이 감지되면 프로세스를 종료합니다.
+                
 
     rc = process.poll()  # 프로세스의 종료 코드를 얻습니다.
     return rc
