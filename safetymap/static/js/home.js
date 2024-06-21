@@ -112,14 +112,23 @@ function findShortestRoute(resultArray) {
         }
     }).done(function (result) {
         let resultData = result.features;
-        let tDistance = "총 거리 : " + ((resultData[0].properties.totalDistance) / 1000).toFixed(1) + "km";
-        let tTime = " 총 시간 : " + ((resultData[0].properties.totalTime) / 60).toFixed(0) + "분";
-        console.log(tDistance + " " + tTime);
+        if (resultData && resultData.length > 0 && resultData[0].properties) {
+            let totalDistance = (resultData[0].properties.totalDistance / 1000).toFixed(1);  // 소수점 이하 한 자리까지 표시
+            let totalTime = (resultData[0].properties.totalTime / 60).toFixed(0);  // 소수점 이하 버림 처리
 
-        $('#short-route').text(tDistance);
-        $('#short-time').text(tTime);
+            let tDistance = "총 거리 : " + totalDistance + "km";
+            let tTime = " 총 시간 : " + totalTime + "분";
 
-        drawShortestRoute(resultData);
+            console.log(tDistance + " " + tTime);
+
+            $('#short-route').text(tDistance);
+            $('#short-time').text(tTime);
+
+            drawShortestRoute(resultData);
+        } else {
+            console.log('결과 데이터가 비어 있거나 예상과 다른 구조입니다.');
+            // 데이터가 비어 있는 경우에 대한 처리를 여기에 추가
+        }
     }).fail(function (error) {
         console.log('최단 경로 탐색 실패:', error);
     });
@@ -138,21 +147,36 @@ function findSafeRoute(resultArray) {
             'csrfmiddlewaretoken': csrftoken,
         }
     }).done(function (response) {
+        console.log('Response from saferoute API:', response);
         let safeRoute = response['result'];
-        let safeDistance = "총 거리 : " + (response['totalDistance']).toFixed(1) + "km";
-        let safeTime = " 총 시간 : " + (response['totalTime']).toFixed(0) + "분";
+        console.log('Received safeRoute:', safeRoute);
 
-        $('#safe-route').text(safeDistance);
-        $('#safe-time').text(safeTime);
+        if (safeRoute && Array.isArray(safeRoute) && safeRoute.length > 0) {
+            let safeDistance = "총 거리 : " + parseFloat(response['totalDistance']).toFixed(1) + "km";
+            let safeTime = " 총 시간 : " + parseInt(response['totalTime']).toFixed(0) + "분";
 
-        $('.route-wrap').show();
-        console.log(safeRoute);
+            $('#safe-route').text(safeDistance);
+            $('#safe-time').text(safeTime);
 
-        drawSafeRoute(safeRoute);
+            $('.route-wrap').show();
+
+            drawSafeRoute(safeRoute);
+        } else {
+            console.log('Invalid safeRoute data:', safeRoute);
+            // 대체 경로 제공
+            $('#safe-route').text('안전 경로를 찾을 수 없습니다.');
+            $('#safe-time').text('');
+            $('.route-wrap').show();
+        }
     }).fail(function (error) {
         console.log('안전 경로 탐색 실패:', error);
+        // 대체 경로 제공
+        $('#safe-route').text('안전 경로를 찾을 수 없습니다.');
+        $('#safe-time').text('');
+        $('.route-wrap').show();
     });
 }
+
 
 function drawShortestRoute(resultData) {
     if (short_line) {
@@ -184,9 +208,25 @@ function drawSafeRoute(safeRoute) {
         leaf_map.removeLayer(safe_line);
     }
 
-    safe_line = L.polyline(safeRoute, {
-        weight: 5
-    }).addTo(leaf_map);
+    let safeRouteLatLngs = [];
+
+    for (let i = 0; i < safeRoute.length; i++) {
+        if (Array.isArray(safeRoute[i]) && safeRoute[i].length === 2) {
+            let latlng = L.latLng(safeRoute[i][0], safeRoute[i][1]);
+            safeRouteLatLngs.push(latlng);
+        } else {
+            console.log('Invalid coordinate pair:', safeRoute[i]);
+        }
+    }
+
+    if (safeRouteLatLngs.length > 0) {
+        safe_line = L.polyline(safeRouteLatLngs, {
+            weight: 5,
+            color: 'blue'
+        }).addTo(leaf_map);
+    } else {
+        console.log('No valid coordinates to draw the route.');
+    }
 }
 
 // 현재 위치 정보를 가져오는 함수
