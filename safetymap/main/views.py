@@ -42,54 +42,38 @@ def saferoute(request):
     neighbor = grid_object['neighbor']
     path = grid_object['path']
 
-    Before_Hex = path[0]
-    increase = [0, 0]  # q, r 증가율
-    count = 1
+    if not path:
+        return HttpResponse(json.dumps({'error': 'No path found'}), content_type="application/json")
 
+    # Loop through the path to calculate SafePath and totalDistance
     for idx, HexPoint in enumerate(path):
-        if Before_Hex is not HexPoint:
-            # 첫 노드 증가율 기록 - 두번째 노드
-            if increase[0] == 0 and increase[1] == 0:
-                x = int(HexPoint.q) - int(Before_Hex.q)
-                y = int(HexPoint.r) - int(Before_Hex.r)
-                increase = [x, y]
-                Before_Hex = HexPoint
-                continue
-            # 증가율 비교
-            else:
-                x = int(HexPoint.q) - int(Before_Hex.q)
-                y = int(HexPoint.r) - int(Before_Hex.r)
-                if increase[0] == x and increase[1] == y:
-                    Before_Hex = HexPoint
-                    continue
-                else:
-                    increase = [x, y]
-
-        count += 1
-        Before_Hex = HexPoint
-
-        # Calculate geo_center using grid_object information
-        center_q, center_r = (HexPoint.q + 0.5) * grid_size[0] + start_corner[0], (HexPoint.r + 0.5) * grid_size[1] + start_corner[1]
+        if idx == 0:
+            # First node
+            center_q = (HexPoint.q + 0.5) * grid_size[0] + start_corner[0]
+            center_r = (HexPoint.r + 0.5) * grid_size[1] + start_corner[1]
+        else:
+            # Subsequent nodes
+            prev_q, prev_r = path[idx - 1].q, path[idx - 1].r
+            center_q = (HexPoint.q + 0.5) * grid_size[0] + start_corner[0]
+            center_r = (HexPoint.r + 0.5) * grid_size[1] + start_corner[1]
+            # Calculate distance between previous and current points
+            distance = haversine((prev_q, prev_r), (HexPoint.q, HexPoint.r), unit=Unit.METERS)
+            totalDistance += distance
+        
         SafePath.append([center_q, center_r])
 
-        if len(SafePath) > 1:
-            totalDistance += haversine(SafePath[len(SafePath) - 2], SafePath[len(SafePath) - 1])
-
-        increase = [0, 0]
-
-    # 마지막 노드 추가
-    last_hex_center_q, last_hex_center_r = (path[-1].q + 0.5) * grid_size[0] + start_corner[0], (path[-1].r + 0.5) * grid_size[1] + start_corner[1]
-    SafePath.append([last_hex_center_q, last_hex_center_r])
-    totalDistance += haversine(SafePath[len(SafePath) - 2], SafePath[len(SafePath) - 1])
-
+    # Calculate total time
+    if totalDistance > 0:
+        soc = 1 / 16  # Assuming speed of 16 meters per second
+        totalTime = totalDistance / soc
+    else:
+        totalTime = 0
+    
     print('토탈 거리:', totalDistance)
-    soc = 1 / 16
-    totalTime = totalDistance // soc
-    print('토탈 시간', totalTime)
+    print('토탈 시간:', totalTime)
     
     # Return JSON response
     return HttpResponse(json.dumps({'result': SafePath, 'totalDistance': totalDistance, 'totalTime': totalTime}), content_type="application/json")
-
         
 
 def PathFinder(request) :
