@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,6 +12,29 @@
         var setpointpage = "{% url 'getspotpoint' %}";
         var pathfinder = "{% url 'pathfinder' %}";
         var saferoute = "{% url 'saferoute' %}";
+
+        function startSpeechRecognition() {
+            fetch("{% url 'recognize_speech' %}")
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.status);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function startScreamDetection() {
+            fetch("{% url 'detect_scream' %}")
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.status);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
     </script>
     <!-- leaflet js  -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -42,7 +64,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap" rel="stylesheet">
 </head>
-
 <body>
     <!-- startPoint, EndPoint InPut -->
     <div class='inputaddr'>
@@ -71,7 +92,17 @@
         </div>
     </div>
 
-    <!--result route information-->
+    <!-- 음성 인식 버튼 -->
+    <div class="voice-recognition-wrap">
+        <button id="voice_recognition_button" type="button" class="btn btn-primary" onclick="startSpeechRecognition()">음성 인식 시작</button>
+    </div>
+
+    <!-- 비명 감지 버튼 -->
+    <div class="scream-detection-wrap">
+        <button id="scream_detection_button" type="button" class="btn btn-danger" onclick="startScreamDetection()">비명 감지 시작</button>
+    </div>
+
+    <!-- result route information -->
     <div class="route-wrap">
         <div id="short" class="rounded border border-4 border-primary opacity-90">
             <p>최단 경로</p>
@@ -90,5 +121,4 @@
         {{map|safe}}
     </div>
 </body>
-
 </html>
