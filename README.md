@@ -57,7 +57,7 @@ safetymap폴더의 manage.py실행
   2. safetymap/safetymap: 프로젝트 설정 디렉토리
      settings.py: Django 프로젝트의 설정 파일. 데이터베이스 설정, 앱 구성, 템플릿 경로, 정적 파일 경로 등을 정의
      urls.py: 프로젝트의 URL 패턴을 정의하고, 각 URL 패턴이 호출하는 뷰를 지정
-  3. 앱 디렉토리 (main과 manage)
+  3. 앱 디렉토리 (main과 manager)
      admin.py: django 관리자 인터페이스를 위한 설정 파일. 모델을 관리자 인터페이스에 등록하여 관리.
      apps.py: 앱의 설정 정의
      models.py: 데이터베이스의 모델을 정의하는 파일. ORM(Object-Relational Mapping)을 사용하여 데이터베이스 테이블과 상호작용할 수 있음.
