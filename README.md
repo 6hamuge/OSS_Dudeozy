@@ -69,19 +69,23 @@ safetymap폴더의 manage.py실행
      템플릿 파일: HTML 파일을 포함하며, 동적으로 생성된 콘텐츠를 표시함.
   6. static 파일 디렉토리 (정적파일 디렉토리)
      CSS, JavaScript, 이미지 파일 등을 포함함.
+     
 2. 비명 인식 기능
-   *screamlearn 내부의 파일과 폴더가 비명 인식 기능에 관한 프로그램입니다.
+   *screamlearn 내부의 파일과 폴더가 비명 인식 기능에 관한 프로그램.
+   * 주사용 라이브러리 : keras, matplotlib, numpy, sounddevice, sklearn, librosa 등 
    
-   - feat_extract.py는 소리 데이터의 특징들을 추출합니다.
-   - extract_feature 함수는 특징을 추출하는 함수이며, parse_audio_files함수는 extract_feature함수를 통해 추출한 특징을 저장합니다.
+   - feat_extract.py는 소리 데이터의 특징들을 추출함.
+   - extract_feature 함수는 특징을 추출하는 함수이며, parse_audio_files함수는 extract_feature함수를 통해 추출한 특징을 저장함.
   
-   - nn.py는 신경망 학습을 진행합니다. feat_extract.py 에서 미리 뽑아둔 특징을 통하여 학습을 시킵니다. 두 개의 은닉층을 사용하였습니다.
+   - nn.py는 신경망 학습을 진행함. feat_extract.py 에서 미리 뽑아둔 특징을 통하여 학습을 시. 두 개의 은닉층을 사용하였음.
+   - 실행한 학습에 대한 결과를 마지막에 보여줌.
   
-   - predict.py는 실시간으로 소리를 감지하여 비명인지 아닌지, 위에서 미리 학습한 결과를 통하여 판단해 줍니다. 
+   - predict.py는 실시간으로 소리를 감지하여 비명인지 아닌지, 위에서 미리 학습한 결과를 통하여 판단해 줌. 
   
-   - test1.py는 위의 과정을 모두 하나로 모은 파일입니다. 비명소리가 감지된다면, 바로 경찰청 웹페이지로 넘어가게 설정해 두었습니다.
+   - test1.py는 위의 과정을 모두 하나로 모은 파일이며, 만약 단독적으로 비명 인식 기능만 사용하고 싶다면, test1.py를 실행시키면 됨.
+   - 비명소리가 감지된다면, 바로 경찰청 웹페이지로 넘어가게 설정해 두었음.
   
-   *이 프로그램은 wav 형식의 음성 데이터를 사용해야 합니다.
+   *이 프로그램은 wav 형식의 음성 데이터를 사용해야 함.
 
 
 ## 라이선스
@@ -89,3 +93,4 @@ safetymap폴더의 manage.py실행
 - https://github.com/thalals/SafetyMap-Graduation-Project/tree/main
   (프로그램이 완전하지 못해서 첫 실행부터 거의 모든 파일을 수정함. 특히 Hexgrid 패키지가 작동하지 않아서 이를 사용하지 않고 경로를 계산할 수 있도록 코드를 수정함. (RouteSearch.py, View.py))
 - https://github.com/imfing/audio-classification/tree/master
+  (비명 소리 인식 관련 오픈소스)
