@@ -87,6 +87,13 @@ safetymap폴더의 manage.py실행
    - 비명소리가 감지된다면, 바로 경찰청 웹페이지로 넘어가게 설정해 두었음.
   
    *이 프로그램은 wav 형식의 음성 데이터를 사용해야 함.
+   *합쳤을 때는 safetymap 폴더의 scream_detection 폴더 안에 있다.
+
+4. 암호 인식 기능
+   safetymap 폴더의 speech_recognition 폴더에 있다.
+   주 사용 라이브러리 : speech_recognition, webbrowser, os
+
+   - main.py는 "두더지"라는 암호를 인식하여 인식에 성공하면, 경찰청의 신고 페이지를 띄어준다.
 
 
 ## 라이선스
