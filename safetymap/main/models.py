@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Alltimeshop(models.Model):
-    name = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     lat = models.FloatField(blank=True, null=True)
     lon = models.FloatField(blank=True, null=True)
 
@@ -85,7 +85,7 @@ class AuthUserUserPermissions(models.Model):
 
 
 class Cctv(models.Model):
-    name = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     lat = models.FloatField(blank=True, null=True)
     lon = models.FloatField(blank=True, null=True)
 
@@ -139,7 +139,7 @@ class DjangoSession(models.Model):
 
 
 class Lamp(models.Model):
-    name = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     lat = models.FloatField()
     lon = models.FloatField()
 
@@ -149,7 +149,7 @@ class Lamp(models.Model):
 
 
 class Loadpoint(models.Model):
-    name = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     lat = models.FloatField()
     lon = models.FloatField()
 
@@ -159,7 +159,7 @@ class Loadpoint(models.Model):
 
 
 class Securitycenter(models.Model):
-    name = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     lat = models.FloatField(blank=True, null=True)
     lon = models.FloatField(blank=True, null=True)
 
