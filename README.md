@@ -48,4 +48,5 @@
 
 
 ## 라이선스
-
+*참고 오픈소스
+- https://github.com/imfing/audio-classification/tree/master
