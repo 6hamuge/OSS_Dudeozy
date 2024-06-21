@@ -1,7 +1,10 @@
 from typing import Iterable
 from django.http.response import HttpResponse
+from django.http import JsonResponse #추가
 from django.shortcuts import render
 from folium import plugins
+import subprocess # 추가
+import os # 추가
 import folium
 import geocoder     #import geojson
 import json, requests
@@ -183,3 +186,13 @@ def getLatLng(addr):
     match_first = result['documents'][0]['address']
 
     return float(match_first['y']),float(match_first['x'])
+
+def start_speech_recognition(request):
+    script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'speech_recognition', 'main.py')
+    subprocess.Popen(["python", script_path])
+    return JsonResponse({"status": "음성 인식이 시작되었습니다."})
+
+def start_scream_detection(request):
+    script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scream_detection', 'main.py')
+    subprocess.Popen(["python", script_path])
+    return JsonResponse({"status": "비명 감지가 시작되었습니다."})
