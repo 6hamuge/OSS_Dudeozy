@@ -30,5 +30,7 @@ urlpatterns = [
    path('SetSpot', views.GetSpotPoint, name='getspotpoint'),
    path('saferoute',views.saferoute, name='saferoute'),
    path('SetSpot/', views.set_spot_view, name='SetSpot'),
+   path('recognize_speech/', views.start_speech_recognition, name='recognize_speech'),
+   path('detect_scream/', views.start_scream_detection, name='detect_scream'),
 
 ]
