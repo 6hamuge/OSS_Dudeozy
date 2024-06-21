@@ -45,6 +45,7 @@ safetymap폴더의 manage.py실행
 
 ## 시연 영상
 
+[Uploading 시현영상2.zip…]()
 
 ## 기술 스택
 1. 길찾기 기능
