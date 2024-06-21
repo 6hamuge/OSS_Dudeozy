@@ -49,6 +49,7 @@ safetymap폴더의 manage.py실행
 1. 길찾기 기능
    - Django 사용: Python으로 구축된 고수준 웹 프레임워크로, 웹 애플리케이션의 백엔드 구축을 하는 데 사용됨.
    - 사용한 라이브러리: geocoder(위치 좌표 변환), leaflet.js(지도 프레임워크), haversine(좌표 간 거리 측정)
+   - safetymap의 각 폴더에 대한 설명
 2. 비명 인식 기능
    *screamlearn 내부의 파일과 폴더가 비명 인식 기능에 관한 프로그램입니다.
    
@@ -66,4 +67,6 @@ safetymap폴더의 manage.py실행
 
 ## 라이선스
 *참고 오픈소스
+- https://github.com/thalals/SafetyMap-Graduation-Project/tree/main
+  (프로그램이 완전하지 못해서 첫 모든 파일을 수정함. 특히 Hexgrid 패키지가 작동하지 않아서 이를 사용하지 않고 경로를 계산할 수 있도록 코드를 수정함. (RouteSearch.py, View.py)
 - https://github.com/imfing/audio-classification/tree/master
