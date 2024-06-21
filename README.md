@@ -49,12 +49,12 @@ safetymap폴더의 manage.py실행
 1. 길찾기 기능
    - Django 사용: Python으로 구축된 고수준 웹 프레임워크로, 웹 애플리케이션의 백엔드 구축을 하는 데 사용됨.
    - 사용한 라이브러리: geocoder(위치 좌표 변환), leaflet.js(지도 프레임워크), haversine(좌표 간 거리 측정)
-   - safetymap의 각 폴더에 대한 설명
 
 - 각 디렉토리의 역할 설명
   1. 프로젝트의 루트 디렉토리
      manage.py: 개발 서버를 시작하고 데이터 마이그레이션을 적용하며, 다양한 관리 명령을 실행하는 데 사용됨.
      db.sqlite3: 프로그램을 실행하면서 생성되는 데이터베이스. 안전요소들의 위도와 경도 정보가 저장돼있음.(각 테이블: alltimeshop, cctv, lamp, loadpoint, securitycenter)
+     My_settings.py: 사용자가 각자가 생성 및 수정해야 하는 setting key값을 담고 있음.
   3. safetymap/safetymap: 프로젝트 설정 디렉토리
      settings.py: Django 프로젝트의 설정 파일. 데이터베이스 설정, 앱 구성, 템플릿 경로, 정적 파일 경로 등을 정의
      urls.py: 프로젝트의 URL 패턴을 정의하고, 각 URL 패턴이 호출하는 뷰를 지정
