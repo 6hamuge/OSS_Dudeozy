@@ -44,9 +44,7 @@ safetymap폴더의 manage.py실행
 - python manage.py runserver
 
 ## 시연 영상
-
-[Uploading 시현영상2.zip…]()
-
+[시현영상2.zip](https://github.com/user-attachments/files/15924208/2.zip)
 ## 기술 스택
 1. 길찾기 기능
    - Django 사용: Python으로 구축된 고수준 웹 프레임워크로, 웹 애플리케이션의 백엔드 구축을 하는 데 사용됨.
@@ -55,6 +53,7 @@ safetymap폴더의 manage.py실행
 - 각 디렉토리의 역할 설명
   1. 프로젝트의 루트 디렉토리
      manage.py: 개발 서버를 시작하고 데이터 마이그레이션을 적용하며, 다양한 관리 명령을 실행하는 데 사용됨.
+
      db.sqlite3: 프로그램을 실행하면서 생성되는 데이터베이스. 안전요소들의 위도와 경도 정보가 저장돼있음.(각 테이블: alltimeshop, cctv, lamp, loadpoint, securitycenter)
      My_settings.py: 사용자가 각자가 생성 및 수정해야 하는 secret key값을 담고 있음.
   3. safetymap/safetymap: 프로젝트 설정 디렉토리
