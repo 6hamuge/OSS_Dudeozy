@@ -68,5 +68,5 @@ safetymap폴더의 manage.py실행
 ## 라이선스
 *참고 오픈소스
 - https://github.com/thalals/SafetyMap-Graduation-Project/tree/main
-  (프로그램이 완전하지 못해서 첫 모든 파일을 수정함. 특히 Hexgrid 패키지가 작동하지 않아서 이를 사용하지 않고 경로를 계산할 수 있도록 코드를 수정함. (RouteSearch.py, View.py)
+  (프로그램이 완전하지 못해서 첫 실행부터 거의 모든 파일을 수정함. 특히 Hexgrid 패키지가 작동하지 않아서 이를 사용하지 않고 경로를 계산할 수 있도록 코드를 수정함. (RouteSearch.py, View.py))
 - https://github.com/imfing/audio-classification/tree/master
