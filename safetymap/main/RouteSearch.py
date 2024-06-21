@@ -15,7 +15,9 @@ class Hex:
         self.r = r
 
     def __eq__(self, other):
-        return self.q == other.q and self.r == other.r
+        if isinstance(other, Hex):
+            return self.q == other.q and self.r == other.r
+        return NotImplemented
 
     def __hash__(self):
         return hash((self.q, self.r))
@@ -80,7 +82,6 @@ def giveCost(startx, starty, endx, endy):
     securitycenters = Securitycenter.objects.filter(lon__range=(endy, starty), lat__range=(endx, startx)).order_by('lat')
     alltimeshops = Alltimeshop.objects.filter(lon__range=(endy, starty), lat__range=(endx, startx)).order_by('lat')
     
-    
     # Log the number of loaded data points
     print(f"Loaded data points:")
     print(f"Loadpoints: {loadpoints.count()}")
@@ -93,7 +94,7 @@ def giveCost(startx, starty, endx, endy):
     for coor in loadpoints:
         lon = float(coor.lon)
         lat = float(coor.lat)
-        hex_point = Hex(lat, lon)
+        hex_point = Hex(lon, lat)
         if hex_point in Hmap:
             Hmap[hex_point] += 1
         else:
@@ -102,7 +103,7 @@ def giveCost(startx, starty, endx, endy):
     for coor in cctvs:
         lon = float(coor.lon)
         lat = float(coor.lat)
-        hex_point = Hex(lat, lon)
+        hex_point = Hex(lon, lat)
         if hex_point in Hmap:
             Hmap[hex_point] += 1
         else:
@@ -111,7 +112,7 @@ def giveCost(startx, starty, endx, endy):
     for coor in alltimeshops:
         lon = float(coor.lon)
         lat = float(coor.lat)
-        hex_point = Hex(lat, lon)
+        hex_point = Hex(lon, lat)
         if hex_point in Hmap:
             Hmap[hex_point] += 1
         else:
@@ -120,7 +121,7 @@ def giveCost(startx, starty, endx, endy):
     for coor in lamps:
         lon = float(coor.lon)
         lat = float(coor.lat)
-        hex_point = Hex(lat, lon)
+        hex_point = Hex(lon, lat)
         if hex_point in Hmap:
             Hmap[hex_point] += 1
         else:
@@ -129,11 +130,16 @@ def giveCost(startx, starty, endx, endy):
     for coor in securitycenters:
         lon = float(coor.lon)
         lat = float(coor.lat)
-        hex_point = Hex(lat, lon)
+        hex_point = Hex(lon, lat)
         if hex_point in Hmap:
             Hmap[hex_point] += 1
         else:
             Hmap[hex_point] = 1
+
+    # Print the Hmap to verify its contents
+    print("Hmap contents:")
+    for key, value in Hmap.items():
+        print(f"Hex({key.q}, {key.r}): {value}")
 
 
 @logging_time
@@ -143,7 +149,7 @@ def astar(starthex, endhex):
     startNode = Node(None, starthex)
     endNode = Node(None, endhex)
     openList = []
-    closeList = []
+    closeList = set()
 
     openList.append(startNode)
 
@@ -155,12 +161,14 @@ def astar(starthex, endhex):
         step += 1
         print(f"Step {step}: Number of nodes in openList = {len(openList)}")
 
+        # 현재 노드를 f 값이 가장 작은 노드로 설정
         currentNode = min(openList, key=lambda node: node.f)
         openList.remove(currentNode)
-        closeList.append(currentNode)
+        closeList.add(currentNode.position)
 
-        print(f"Expanding node: {currentNode.position}")
+        print(f"Expanding node: {currentNode.position.q}, {currentNode.position.r}")
 
+        # 종료 조건: 목적지에 도달한 경우
         if currentNode.position == endNode.position:
             print("Found the end node. Constructing the path...")
             path = []
@@ -170,9 +178,11 @@ def astar(starthex, endhex):
                 current = current.parent
             return path[::-1]
 
-        neighbor = get_hex_neighbors(currentNode.position)
-        for newPosition in neighbor:
+        neighbors = get_hex_neighbors(currentNode.position)
+        for newPosition in neighbors:
+            print(f"Checking neighbor: {newPosition.q}, {newPosition.r}")
             if newPosition not in Hmap:
+                print(f"Neighbor {newPosition.q}, {newPosition.r} not in Hmap.")
                 continue
 
             TileCost = Hmap[newPosition]
@@ -181,12 +191,7 @@ def astar(starthex, endhex):
             new_h = HexHeuristic(newPosition, endhex)
             new_f = new_g + new_h
 
-            in_close = False
-            for node in closeList:
-                if node.position == newPosition:
-                    in_close = True
-                    break
-            if in_close:
+            if newPosition in closeList:
                 continue
 
             new_node = Node(currentNode, newPosition)
@@ -196,23 +201,18 @@ def astar(starthex, endhex):
             new_node.TileValue = 1 / (1 + TileCost) + (new_f / max_h)
             new_node.TileValue_sum = currentNode.TileValue_sum + new_node.TileValue
 
-            in_open = False
-            for node in openList:
-                if node.position == newPosition:
-                    in_open = True
-                    if node.f > new_f:
-                        node.parent = currentNode
-                        node.g = new_g
-                        node.h = new_h
-                        node.f = new_f
-                        node.TileValue = 1 / (1 + TileCost) + (new_f / max_h)
-                        node.TileValue_sum = currentNode.TileValue_sum + node.TileValue
-                    break
-            if not in_open:
+            # openList에 이미 있는 노드와 비교하여 비용이 더 낮은 경우 업데이트
+            existing_node = next((node for node in openList if node.position == newPosition), None)
+            if existing_node:
+                if existing_node.f > new_f:
+                    openList.remove(existing_node)
+                    openList.append(new_node)
+                    print(f"Updated existing node in openList: {new_node.position.q}, {new_node.position.r}")
+            else:
                 openList.append(new_node)
-                print(f"Added new node to openList: {new_node.position}")
+                print(f"Added new node to openList: {new_node.position.q}, {new_node.position.r}")
 
-    # No path found
+    # 경로를 찾지 못한 경우
     print("No path found.")
     return None
 
@@ -258,8 +258,8 @@ def startSetting(start_coordinate, end_coordinate):
 
     # Initialize neighbors for the center point
     neighbor = get_hex_neighbors(Hex(center_q, center_r))
-    for hex in neighbor:
-        Hmap[hex] = 0
+    for hex_obj in neighbor:
+        Hmap[hex_obj] = 0
 
     # Update Hmap with data from various sources
     giveCost(startx, starty, endx, endy)
